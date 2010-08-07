@@ -8,21 +8,21 @@ introduction
 
 When loaded, this tag replaces the existing load tag, as it is backwards-compatible. It provides features that the existing load tag lacks:
 
-- Templatetag namespaces:
+### Templatetag namespaces:
 
     {% load my_tags into cool_tags %}    # Load library `my_tags` into namespace `cool_tags`.
     {% cool_tags.my_tag %}               # Usage of tag `my_tag` imported above as part of the template library `my_tags`.
 
-- Load only a single tag from a library:
+### Load only a single tag from a library:
 
     {% load lib.tag_name %}    # Load tag `tag_name` from templatetag library `lib`.
     {% tag_name %}             # Usage of tag imported above.
 
-- Load library from a specific application:
+### Load library from a specific application:
 
     {% load lib from my_app %}    # Ensure that library is loaded from my_app (by default, this will load the last library of that name in all your INSTALLED_APPS).
 
-- Load tag as different name
+### Load tag as different name
 
     {% load my_tags.foo_tag as my_foo_tag %}    # Load tag `foo_tag` from library `my_tags` and assign to name `my_foo_tag`
     {% my_foo_tag %}                            # Usage of tag imported above.
