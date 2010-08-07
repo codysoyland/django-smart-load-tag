@@ -1,28 +1,30 @@
 django-smart-load-tag
 =====================
 
-An attempt to bring namespaces and more control to Django's {% load %} tag.
+An attempt to bring namespaces and more control to Django's `{% load %}` tag.
+
+This project includes two tags: `{% import %}` and a replacement for the built-in `{% load %}`. Both provide a similar feature set. The primary difference is that `{% import %}` namespaces by default, where `{% load %}` does not, retaining backwards compatibility with Django's built-in `{% load %}` tag.
 
 introduction
 ------------
 
-When loaded, this tag replaces the existing load tag, as it is backwards-compatible. It provides features that the existing load tag lacks:
+After loading, the `{% load %}` tag replaces the existing load tag, as it is backwards-compatible. It provides features that the existing load tag lacks:
 
-### Templatetag namespaces:
+### templatetag namespaces:
 
     {% load my_tags into cool_tags %}    # Load library `my_tags` into namespace `cool_tags`.
     {% cool_tags.my_tag %}               # Usage of tag `my_tag` imported above as part of the template library `my_tags`.
 
-### Load only a single tag from a library:
+### load only a single tag from a library:
 
     {% load lib.tag_name %}    # Load tag `tag_name` from templatetag library `lib`.
     {% tag_name %}             # Usage of tag imported above.
 
-### Load library from a specific application:
+### load library from a specific application:
 
     {% load lib from my_app %}    # Ensure that library is loaded from my_app (by default, this will load the last library of that name in all your INSTALLED_APPS).
 
-### Load tag as different name
+### load tag as different name
 
     {% load my_tags.foo_tag as my_foo_tag %}    # Load tag `foo_tag` from library `my_tags` and assign to name `my_foo_tag`
     {% my_foo_tag %}                            # Usage of tag imported above.
@@ -51,5 +53,22 @@ Multiple loads can be on the same line, optionally comma separated, enabling mor
     {% render_content %}                  # from `foo_tags from app2`
     {% render_bar_content %}              # from `bar_tags.render_content as render_bar_content`
 
+The functionality provided by django-smart-load-tag is a progressive enhancement, and can be safely loaded into any template, as it remains backwards-compatible with Django's built-in `{% load %}` tag.
 
-The functionality provided by django-smart-load-tag is a progressive enhancement, and can be safely loaded into any template, as it remains backwards-compatible with Django's built-in load tag.
+alternative syntax
+------------------
+
+The `{% load %}` replacement is intended to be backwards compatible, but a new tag also exists, `{% import %}` that provides a syntax that defaults to providing a namespace, while allowing you to opt-out of namespacing the loaded tags (using "* from").
+
+The following table illustrates the differences in syntax from the smart `{% load %}` tag.
+
+    `{% import %}` syntax                           `{% load %}` syntax
+    ---------------------                           -------------------
+
+    {% import foo_tags %}                           {% load foo_tags into foo_tags %}
+    {% import foo_tags from app1 %}                 {% load foo_tags from app1 into foo_tags %}
+    {% import foo_tags.my_tag %}                    {% load foo_tags.my_tag as foo_tags.my_tag %}
+    {% import foo_tags from my_app as my_foo %}     {% load foo_tags from my_app into my_foo %}
+    {% import foo_tags.my_tag as my_foo_tag %}      {% load foo_tags.my_tag as my_foo_tag %}
+    {% import * from foo_tags %}                    {% load foo_tags %}
+    {% import * from foo_tags from app1 %}          {% load foo_tags from app1 %}
