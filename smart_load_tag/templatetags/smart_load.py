@@ -26,6 +26,8 @@ class LoaderTag(object):
         args = token.contents.replace(',', '').split()
         args.pop(0) # remove command name ('load')
 
+        # TODO: Raise appropriate template syntax errors when incorrect arguments are
+        # passed. Currently a variety of random exceptions can occur.
         libs = self.parse_arguments(args)
 
         for lib in libs:
