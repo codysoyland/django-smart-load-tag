@@ -29,12 +29,12 @@ After loading, the `{% load %}` tag replaces the existing load tag, as it is bac
     {% load my_tags.foo_tag as my_foo_tag %}    # Load tag `foo_tag` from library `my_tags` and assign to name `my_foo_tag`
     {% my_foo_tag %}                            # Usage of tag imported above.
 
-Thus, the syntax for the tag is this psuedo-regex:
+Thus, the syntax for the tag is described by this psuedo-regex:
 
     {% load (lib_name(.tag_name)?( from app)?( as name)?( into namespace)?,? )+ %}
 
-more examples
--------------
+examples
+--------
 
 Any combination of `from`, `as`, and `into` clauses are acceptable:
 
@@ -62,8 +62,8 @@ The `{% load %}` replacement is intended to be backwards compatible, but a new t
 
 The following table illustrates the differences in syntax from the smart `{% load %}` tag.
 
-    `{% import %}` syntax                           `{% load %}` syntax
-    ---------------------                           -------------------
+    {% import %} syntax                           {% load %} syntax
+    -------------------                           -----------------
 
     {% import foo_tags %}                           {% load foo_tags into foo_tags %}
     {% import foo_tags from app1 %}                 {% load foo_tags from app1 into foo_tags %}
