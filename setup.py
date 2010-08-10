@@ -8,7 +8,7 @@ README = read('README.md')
 
 setup(
     name = "django-smart-load-tag",
-    version = "0.2",
+    version = "0.3",
     url = 'http://github.com/codysoyland/django-smart-load-tag',
     license = 'BSD',
     description = "An attempt to bring namespaces and more control to Django's {% load %} tag.",
