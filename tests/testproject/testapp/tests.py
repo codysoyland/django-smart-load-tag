@@ -131,8 +131,8 @@ class SmartLoadTestCase(LoaderTestCase):
 
         self.assertTemplateRenders(
             '{% load smart_load %}'
-            '{% load lib1.tag1 from app2 as app2lib1tag2 into rockin_tags, lib2, lib2.tag2 from app1 as lib2tag2 %}'
-            '{% rockin_tags.app2lib1tag2 %}'
+            '{% load lib1.tag1 from app2 as app2lib1tag1 into rockin_tags, lib2, lib2.tag2 from app1 as lib2tag2 %}'
+            '{% rockin_tags.app2lib1tag1 %}'
             '{% lib2tag2 %}'
             '{% tag1 %}'
             '{% tag2 %}'
@@ -156,58 +156,67 @@ class ImportTestCase(LoaderTestCase):
         )
 
     def test_namespace(self):
-        self.assertEqual(self.render_string(
+        self.assertTemplateRenders(
             '{% load smart_load %}'
             '{% import lib1 as my_lib %}'
             '{% my_lib.tag1 %}'
-        ),
+        ,
             '<app 2 lib 1 tag 1>'
         )
 
     def test_single_import(self):
-        self.assertEqual(self.render_string(
+        self.assertTemplateRenders(
             '{% load smart_load %}'
             '{% import lib1.tag1 %}'
             '{% lib1.tag1 %}'
-        ),
+        ,
             '<app 2 lib 1 tag 1>'
         )
 
     def test_specific_app(self):
-        self.assertEqual(self.render_string(
+        self.assertTemplateRenders(
             '{% load smart_load %}'
             '{% import lib1 from app1 %}'
             '{% import lib2 from app2 %}'
             '{% lib1.tag1 %}'
             '{% lib2.tag1 %}'
-        ),
+        ,
             '<app 1 lib 1 tag 1>'
             '<app 2 lib 2 tag 1>'
         )
 
     def test_specific_app_and_name(self):
-        self.assertEqual(self.render_string(
+        self.assertTemplateRenders(
             '{% load smart_load %}'
             '{% import lib1 from app1 as my_lib1 %}'
             '{% my_lib1.tag1 %}'
-        ),
+        ,
             '<app 1 lib 1 tag 1>'
         )
 
     def test_changed_name(self):
-        self.assertEqual(self.render_string(
+        self.assertTemplateRenders(
             '{% load smart_load %}'
             '{% import lib1.tag1 as my_tag %}'
             '{% my_tag %}'
-        ),
+        ,
             '<app 2 lib 1 tag 1>'
         )
 
     def test_no_namespace(self):
-        self.assertEqual(self.render_string(
+        self.assertTemplateRenders(
             '{% load smart_load %}'
             '{% import * from lib1 %}'
             '{% tag1 %}'
-        ),
+        ,
             '<app 2 lib 1 tag 1>'
+        )
+
+    def test_no_namespace_with_specific_app(self):
+        self.assertTemplateRenders(
+            '{% load smart_load %}'
+            '{% import * from lib1 from app1 %}'
+            '{% tag1 %}'
+        ,
+            '<app 1 lib 1 tag 1>'
         )
