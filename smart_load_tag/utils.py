@@ -1,6 +1,24 @@
 from django.template import Library, TemplateSyntaxError, InvalidTemplateLibrary, get_templatetags_modules, import_library
 
 def load(parser, lib, tag='*', name=None, namespace=None, app=None):
+    """
+    Determine and load tags into parser.
+
+    If only a parser and lib are provided, it will behave just like Django's
+    built-in {% load %} tag. Additional arguments provide more control over
+    its behavior.
+
+    Arguments:
+
+    - parser        (required) Template parser to load the tag into.
+    - lib           (required) Name of template library to load.
+    - tag           If '*', it will load all tags from the given library. If a
+                    string is provided, it will load a tag of that name.
+    - name          Name to assign to the loaded tag (defaults to the name
+                    registered to the template library object).
+    - namespace     String to prepend to the name of the tag.
+    - app           Tries to load the tag from the given app name.
+    """
     try:
         lib_name = lib
         lib = Library()
@@ -23,6 +41,16 @@ def load(parser, lib, tag='*', name=None, namespace=None, app=None):
         raise TemplateSyntaxError("'%s' is not a valid tag library: %s" % (lib, e))
 
 def get_library(library_name, app_name=None):
+    """
+    (Forked from django.template.get_library)
+
+    Load the template library module with the given name.
+
+    If library is not already loaded loop over all templatetags modules to locate it.
+
+    {% load somelib %} and {% load someotherlib %} loops twice.
+    """
+    #TODO: add in caching. (removed when forked from django.template.get_library).
     templatetags_modules = get_templatetags_modules()
     tried_modules = []
     for module in templatetags_modules:
