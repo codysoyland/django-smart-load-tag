@@ -6,6 +6,21 @@ An attempt to bring namespaces and more control to Django's ``{% load %}`` tag.
 
 This project includes two tags: ``{% import %}`` and a replacement for the built-in ``{% load %}``. Both provide a similar feature set. The primary difference is that ``{% import %}`` namespaces by default, where ``{% load %}`` does not, retaining backwards compatibility with Django's built-in ``{% load %}`` tag.
 
+installation
+============
+
+To install, first install the package to your system using either of the following::
+
+    pip install django-smart-load-tag
+    easy_install django-smart-load-tag
+
+Then you must install into your Django project by adding "smart_load_tag" to your settings.INSTALLED_APPS.
+
+If you want to use django-smart-load-tag without loading it into every template, you can install it globally by adding it to your builtin tags. Just add the following to your urlconf (usually urls.py)::
+
+    from django.template import add_to_builtins
+    add_to_builtins('smart_load_tag.templatetags.smart_load')
+
 introduction
 ============
 
