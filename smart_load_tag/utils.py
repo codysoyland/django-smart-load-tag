@@ -57,7 +57,8 @@ def get_library(library_name, app_name=None):
         taglib_module = '%s.%s' % (module, library_name)
         tried_modules.append(taglib_module)
         lib = import_library(taglib_module)
-        if lib and app_name and taglib_module.split('.')[-3] == app_name:
+        current_app = '.'.join(taglib_module.split('.')[:-2])
+        if lib and app_name and current_app == app_name:
             break
     if not lib:
         raise InvalidTemplateLibrary("Template library %s not found, tried %s" % (library_name, ','.join(tried_modules)))
