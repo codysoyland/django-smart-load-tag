@@ -143,6 +143,39 @@ class SmartLoadTestCase(LoaderTestCase):
             '<app 2 lib 2 tag 2>'
         )
 
+    def test_sub_app(self):
+        self.assertTemplateRenders(
+            '{% load smart_load %}'
+            '{% load lib3 %}'
+            '{% tag3 %}'
+        ,
+            '<app 3 sub_app1 lib 3 tag 3>'
+        )
+
+        self.assertTemplateRenders(
+            '{% load smart_load %}'
+            '{% load lib3 from app1 %}'
+            '{% tag3 %}'
+        ,
+            '<app 1 lib 3 tag 3>'
+        )
+
+        self.assertTemplateRenders(
+            '{% load smart_load %}'
+            '{% load lib3 from sub_app1 %}'
+            '{% tag3 %}'
+        ,
+            '<app 3 sub_app1 lib 3 tag 3>'
+        )
+
+        self.assertTemplateRenders(
+            '{% load smart_load %}'
+            '{% load lib3 from app3.sub_app1 %}'
+            '{% tag3 %}'
+        ,
+            '<app 3 sub_app1 lib 3 tag 3>'
+        )
+
 class ImportTestCase(LoaderTestCase):
     def test_basic(self):
         self.assertTemplateRenders(
@@ -219,4 +252,37 @@ class ImportTestCase(LoaderTestCase):
             '{% tag1 %}'
         ,
             '<app 1 lib 1 tag 1>'
+        )
+
+    def test_sub_app(self):
+        self.assertTemplateRenders(
+            '{% load smart_load %}'
+            '{% import * from lib3 %}'
+            '{% tag3 %}'
+        ,
+            '<app 3 sub_app1 lib 3 tag 3>'
+        )
+
+        self.assertTemplateRenders(
+            '{% load smart_load %}'
+            '{% import * from lib3 from app1 %}'
+            '{% tag3 %}'
+        ,
+            '<app 1 lib 3 tag 3>'
+        )
+
+        self.assertTemplateRenders(
+            '{% load smart_load %}'
+            '{% import * from lib3 from sub_app1 %}'
+            '{% tag3 %}'
+        ,
+            '<app 3 sub_app1 lib 3 tag 3>'
+        )
+
+        self.assertTemplateRenders(
+            '{% load smart_load %}'
+            '{% import * from lib3 from app3.sub_app1 %}'
+            '{% tag3 %}'
+        ,
+            '<app 3 sub_app1 lib 3 tag 3>'
         )

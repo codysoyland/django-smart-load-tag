@@ -53,14 +53,39 @@ def get_library(library_name, app_name=None):
     #TODO: add in caching. (removed when forked from django.template.get_library).
     templatetags_modules = get_templatetags_modules()
     tried_modules = []
+    best_match_lib = None
+    last_found_lib = None
+    app_name_parts = 0
+    if app_name:
+        app_name_parts = app_name.count('.')
     for module in templatetags_modules:
         taglib_module = '%s.%s' % (module, library_name)
         tried_modules.append(taglib_module)
         lib = import_library(taglib_module)
-        current_app = '.'.join(taglib_module.split('.')[:-2])
-        if lib and app_name and current_app == app_name:
+        if not lib:
+            continue
+        last_found_lib = lib
+
+        if not app_name:
+            continue
+
+        module_list = module.split('.')
+        module_list.pop() # remove the last part 'templetags'
+        current_app = '.'.join(module_list)
+        if current_app == app_name:
             break
-    if not lib:
+
+        start = len(module_list) - app_name_parts - 1
+        if start < 0:
+            continue
+
+        partial_app = '.'.join(module_list[start:])
+        if partial_app == app_name:
+            best_match_lib = lib
+
+    if best_match_lib:
+        last_found_lib = best_match_lib
+    if not last_found_lib:
         raise InvalidTemplateLibrary("Template library %s not found, tried %s" % (library_name, ','.join(tried_modules)))
 
-    return lib
+    return last_found_lib
