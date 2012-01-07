@@ -46,5 +46,6 @@ INSTALLED_APPS = (
     'smart_load_tag',
     'testproject.app1',
     'testproject.app2',
+    'testproject.app3.sub_app1',
     'testproject.testapp',
 )
